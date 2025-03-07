@@ -41,6 +41,11 @@ jobs:
             package-lock.json
             test/package-lock.json
 
+      # node-gyp needs a newer version of Python.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - run: SKIP_SUBMODULE_DEPS=1 npm ci
 
       - name: Install development tools
@@ -48,7 +53,7 @@ jobs:
           cd /etc/yum.repos.d/
           sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
           sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-          yum install -y gcc-c++ make jq rsync python3 libsecret-devel krb5-devel
+          yum install -y gcc-c++ make jq rsync libsecret-devel krb5-devel
 
       - name: Install nfpm and envsubst
         run: |
@@ -138,6 +143,11 @@ jobs:
             package-lock.json
             test/package-lock.json
 
+      # node-gyp needs a newer version of Python.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install cross-compiler and system dependencies
         run: |
           dpkg --add-architecture $TARGET_ARCH
@@ -149,8 +159,7 @@ jobs:
             libsecret-1-dev:$TARGET_ARCH \
             libkrb5-dev:$TARGET_ARCH \
             ca-certificates \
-            curl wget rsync gettext-base \
-            python3
+            curl wget rsync gettext-base
 
       - run: SKIP_SUBMODULE_DEPS=1 npm ci
 
